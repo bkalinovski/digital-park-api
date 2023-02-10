@@ -1,18 +1,26 @@
-using System;
-
 namespace DigitalPark.Domain.Entities;
 
-public class EventSpace
+public class Event
 {
     public Guid Id { get; set; }
 
-    public string Title { get; set; }
+    public string TitleRo { get; set; }
+
+    public string TitleEng { get; set; }
+
+    public string DescriptionRo { get; set; }
+
+    public string DescriptionEng { get; set; }
+    
+    public string ImageRo { get; set; }
+
+    public string ImageEng { get; set; }
 
     public DateTime Date { get; set; }
 
-    public Guid SpaceId { get; set; }
+    public Guid LocationId { get; set; }
 
-    public string Image { get; set; }
+    public virtual ICollection<EventContent> Contents { get; set; } = new HashSet<EventContent>();
 
-    public virtual EventSpace Space { get; set; }
+    public virtual Location Location { get; set; }
 }
