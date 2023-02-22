@@ -18,21 +18,14 @@ internal class EventContentConfiguration : IEntityTypeConfiguration<EventContent
         builder.Property(t => t.OrderNr)
                .HasColumnType("int")
                .IsRequired();
-        
+
+        builder.HasIndex(t => new { t.EventId, t.OrderNr })
+               .IsUnique();
+
         builder.Property(t => t.Type)
                .HasColumnType("nvarchar(10)")
                .HasMaxLength(10)
                .HasConversion(type => type.ToString(), s => (ContentType)Enum.Parse(typeof(ContentType), s))
-               .IsRequired();
-        
-        builder.Property(t => t.Language)
-               .HasColumnType("nvarchar(5)")
-               .HasMaxLength(5)
-               .HasConversion(language => language.ToString(), s => (ContentLanguage)Enum.Parse(typeof(ContentLanguage), s))
-               .IsRequired();
-        
-        builder.Property(t => t.Content)
-               .HasColumnType("nvarchar(max)")
                .IsRequired();
 
         builder.HasOne(t => t.Event)
@@ -41,5 +34,12 @@ internal class EventContentConfiguration : IEntityTypeConfiguration<EventContent
                .HasForeignKey(t => t.EventId)
                .IsRequired()
                .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.HasMany(t => t.Translations)
+               .WithOne(t => t.EventContent)
+               .HasPrincipalKey(t => t.Id)
+               .HasForeignKey(t => t.EventContentId)
+               .IsRequired()
+               .OnDelete(DeleteBehavior.NoAction);
     }
 }

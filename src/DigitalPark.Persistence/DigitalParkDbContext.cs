@@ -22,9 +22,19 @@ public class DigitalParkDbContext : DbContext, IDigitalParkDbContext
         _currentUserService = currentUserService;
     }
 
-    public DbSet<Event> Events { get; set; }
     public DbSet<Location> Locations { get; set; }
+    
+    public DbSet<LocationTranslation> LocationsTranslations { get; set; }
+    
+    public DbSet<Event> Events { get; set; }
+    
+    public DbSet<EventTranslation> EventsTranslations { get; set; }
+
     public DbSet<EventContent> EventContents { get; set; }
+    
+    public DbSet<EventContentTransation> EventContentTransations { get; set; }
+    
+    public DbSet<Language> Languages { get; set; }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {

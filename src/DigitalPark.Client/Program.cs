@@ -1,5 +1,7 @@
 ﻿using System.Text.Json;
 using DigitalPark.Application;
+using DigitalPark.Application.Common.Enums;
+using DigitalPark.Application.Common.Interfaces;
 using DigitalPark.Application.Events.Queries.GetEvents;
 using DigitalPark.Application.System.Commands.SeedSampleData;
 using DigitalPark.Persistence;
@@ -32,8 +34,12 @@ public class Program
         var serviceProvider = new ServiceCollection()
                               .AddPersistenceServices(Configuration)
                               .AddApplicationServices()
+                              .AddClientServices()
                               .BuildServiceProvider();
 
+        var languageService = serviceProvider.GetService<ILanguageProvider>();
+        languageService!.SetLanguage(ActiveLanguage.Ro);
+        
         var mediator = serviceProvider.GetService<IMediator>();
 
         await mediator!.Send(new SeedSampleDataCommand());
@@ -41,5 +47,7 @@ public class Program
         var eventsPaged = await mediator!.Send(new GetEventsQuery(1, 3));
 
         Console.WriteLine(JsonSerializer.Serialize(eventsPaged));
+        
+        Console.WriteLine("DONE.");
     }
 }

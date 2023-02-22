@@ -14,34 +14,6 @@ internal class EventConfiguration : IEntityTypeConfiguration<Event>
         builder.Property(t => t.Id)
                .ValueGeneratedOnAdd();
 
-        builder.Property(t => t.TitleRo)
-               .HasColumnType("nvarchar(50)")
-               .HasMaxLength(50)
-               .IsRequired();
-        
-        builder.Property(t => t.TitleEng)
-               .HasColumnType("nvarchar(50)")
-               .HasMaxLength(50)
-               .IsRequired();
-        
-        builder.Property(t => t.DescriptionRo)
-               .HasColumnType("nvarchar(1000)")
-               .HasMaxLength(1000)
-               .IsRequired();
-        
-        builder.Property(t => t.DescriptionEng)
-               .HasColumnType("nvarchar(1000)")
-               .HasMaxLength(1000)
-               .IsRequired();
-        
-        builder.Property(t => t.ImageRo)
-               .HasColumnType("nvarchar(max)")
-               .IsRequired();
-        
-        builder.Property(t => t.ImageEng)
-               .HasColumnType("nvarchar(max)")
-               .IsRequired();
-
         builder.HasOne(t => t.Location)
                .WithMany(t => t.Events)
                .HasPrincipalKey(t => t.Id)
@@ -50,6 +22,13 @@ internal class EventConfiguration : IEntityTypeConfiguration<Event>
                .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(t => t.Contents)
+               .WithOne(t => t.Event)
+               .HasPrincipalKey(t => t.Id)
+               .HasForeignKey(t => t.EventId)
+               .IsRequired()
+               .OnDelete(DeleteBehavior.NoAction);
+        
+        builder.HasMany(t => t.Translations)
                .WithOne(t => t.Event)
                .HasPrincipalKey(t => t.Id)
                .HasForeignKey(t => t.EventId)

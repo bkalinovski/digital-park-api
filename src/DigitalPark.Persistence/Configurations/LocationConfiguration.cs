@@ -14,16 +14,6 @@ internal class LocationConfiguration : IEntityTypeConfiguration<Location>
         builder.Property(t => t.Id)
                .ValueGeneratedOnAdd();
 
-        builder.Property(t => t.TitleRo)
-               .HasColumnType("nvarchar(50)")
-               .HasMaxLength(50)
-               .IsRequired();
-        
-        builder.Property(t => t.TitleEng)
-               .HasColumnType("nvarchar(50)")
-               .HasMaxLength(50)
-               .IsRequired();
-        
         builder.Property(t => t.CreatedAt)
                .HasColumnType("datetime2")
                .HasDefaultValueSql("getdate()")
@@ -33,5 +23,12 @@ internal class LocationConfiguration : IEntityTypeConfiguration<Location>
                .HasColumnType("bit")
                .HasDefaultValue(true)
                .IsRequired();
+
+        builder.HasMany(t => t.Translations)
+               .WithOne(t => t.Location)
+               .HasPrincipalKey(t => t.Id)
+               .HasForeignKey(t => t.LocationId)
+               .IsRequired()
+               .OnDelete(DeleteBehavior.NoAction);
     }
 }
